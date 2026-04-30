@@ -1,0 +1,97 @@
+Navegar para páginas
+
+'visitar url'
+'navegar para /login' // com baseUrl definida
+
+Interagir com elementos
+
+Clique
+'clicar no botão de login'
+'clicar no botão "x"'
+'clicar no botão que contém "Editar"'
+'expandir a seção de FAQ'
+'fechar a seção de Informações Técnicas'
+'trocar para a aba de Configurações'
+'forçar clique no botão de envio'
+'duplo clique na imagem do produto'
+'clique com o botão direito no item de arquivo'
+
+Digitar e preencher
+'digitar "john.doe@company.com" no campo de email'
+'digitar {enter} no campo de email'
+'escrever "42" no campo numérico'
+'preencher "Sem comentário" no textarea'
+'preencher o campo de busca com "cypress"'
+'forçar digitação de "texto" no campo oculto'
+'limpar o campo de usuário'
+'focar no campo de busca'
+'remover o foco do campo de filtro'
+
+Formulários e controles
+'selecionar "Canadá" no menu de países'
+'escolher "Estados Unidos" da lista'
+'selecionar "Mais recentes" das sugestões'
+'marcar "Eu concordo"'
+'desmarcar "Enviar-me atualizações"'
+'alternar o botão "Modo Escuro"'
+'enviar o formulário de contato'
+
+Scroll
+'rolar a seção de vendas para a visualização'
+'rolar até a data de hoje no calendário'
+
+Teclado, mouse e outros eventos
+'pressionar "Tab" para focar no próximo campo'
+'pressionar "Enter" para escolher a seleção atual'
+'passar o mouse sobre o botão "Ajuda"'
+'disparar um evento de mousemove no .bar-chart'
+
+Verificar resultados
+'garantir que o botão de confirmação está visível'
+'verificar se existe um alerta'
+'esperar que a notificação contenha o texto "Email enviado"'
+'confirmar que o elemento [data-cy="result"] possui o texto "Sucesso"'
+'o toast não deve conter o texto "Falhou"'
+'a URL atual deve ser "https://cloud.cypress.io/login"'
+'espero que o campo de email tenha o valor "anika.mehta@email.com"'
+'verificar se o campo "Lembrar de mim" está desabilitado'
+'o botão "Login" deve estar habilitado'
+'agora o produto deve ter a classe "loading"'
+'afirmar que a checkbox "Eu concordo" está marcada'
+'validar que o #error-message está vazio'
+'a aba "Perfil" deve estar ativa'
+'o modal deve estar visível'
+'verificar se ambas as checkboxes estão marcadas'
+'o campo de busca deve estar em foco'
+'e "Estados Unidos" está selecionado'
+'garantir que o contador mostra 5'
+'verificar se o contador tem o id "reset"'
+'confirmar que o frame de código inclui o HTML "<span class="token">'
+
+Asserções de inexistência
+Você pode verificar que elementos não existem para gerar asserções not.exist, mas somente quando você fornecer um seletor CSS exato ou quando utilizar uma busca baseada em texto. Descrições em linguagem natural para inexistência ainda não são suportadas. Além disso, certifique-se de que sua intenção é realmente verificar que o elemento não existe no DOM, e não apenas que ele não está visível.
+
+'verificar que #error-message não existe'
+'o ".loading-spinner" não deve existir'
+'garantir que a mensagem "Erro" não existe'
+'confirmar que o botão "Resetar" não existe'
+
+Alterar o viewport
+'definir o viewport para 400x600'
+
+Esperar
+Espere por um tempo determinado ou por um intercept já aliased ser resolvido antes de prosseguir para o próximo comando no Cypress.
+
+'esperar 2 segundos'
+'esperar 500 milissegundos'
+'esperar pelo alias @customer'
+'esperar a requisição @users finalizar'
+
+Opções de comandos
+'ir para "/usuarios" com um timeout de 10 segundos'
+'fechar o modal usando um timeout de 6 segundos'
+'forçar clique no botão de envio'
+'forçar clique no botão "Fechar"'
+'forçar digitação de "texto" no campo oculto'
+'forçar marcar a checkbox "Eu concordo"'
+'forçar desmarcar a checkbox "Enviar atualizações"'

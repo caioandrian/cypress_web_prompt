@@ -1,0 +1,97 @@
+Navigate to pages
+
+'visit url'
+'navigate to /login' // with baseUrl set
+
+Interact with elements
+
+Click
+'click the login button'
+'hit the "x" button'
+'click the button containing "Edit"'
+'expand the FAQ section'
+'close the Technical Information section'
+'switch to the Settings tab'
+'force click the submit button'
+'double click the product image'
+'right click the file item'
+
+Type and inputs
+'type "john.doe@company.com" in the email field'
+'type {enter} in the email field'
+'write "42" in the number field'
+'put "No comment" in the textarea'
+'fill the search input with "cypress"'
+'force type "text" in the hidden input'
+'clear the username field'
+'focus on the search input'
+'blur the filter input'
+
+Form and controls
+'select "Canada" from the country dropdown'
+'pick "United States" from the list'
+'choose "Newest" from the suggestions'
+'check "I agree"'
+'uncheck "Send me updates"'
+'toggle the "Dark Mode" switch'
+'submit the contact form'
+
+Scroll
+'scroll the sales section into view'
+'scroll to todays date in the calendar'
+
+Keyboard, mouse, and other events
+'press "Tab" to focus the next field'
+'press "Enter" to choose the current selection'
+'hover over the "Help" button'
+'trigger a mousemove event on the .bar-chart'
+
+Verify results
+'make sure the confirmation button is visible'
+'verify an alert exists'
+'expect the notification to contain the text "Email sent"'
+'confirm that the [data-cy="result"] element has the text "Success"'
+'the toast should not contain the text "Failed"'
+'the current URL should be "https://cloud.cypress.io/login"'
+'I expect the email field to have the value "anika.mehta@email.com"'
+'verify the "Remember me" input is disabled'
+'the "Login" button should be enabled'
+'now the product should have the class "loading"'
+'assert the "I agree" checkbox is checked'
+'validate that the #error-message is empty'
+'the "Profile" tab should be active'
+'the modal ought to be displayed'
+'verify both checkboxes are checked'
+'the search input should have focus'
+'and "United States" is selected'
+'ensure that the counter shows 5'
+'verify the counter has the id "reset"'
+'confirm that the code frame includes HTML "<span class="token">'
+
+Non-existence assertions
+You can verify that elements do not exist to generate not.exist assertions, but only when you provide an exact CSS selector or when you use text-based targeting. Natural language descriptions for non-existence are not currently supported. Additionally, ensure that your intention is to verify that the element does not exist in the DOM, not that it is not visible.
+
+'verify #error-message does not exist'
+'the ".loading-spinner" should not exist'
+'make sure the "Error" message does not exist'
+'confirm "Reset" button does not exist'
+
+Change the viewport
+'set the viewport to 400x600'
+
+Wait
+Wait for an amount of time or wait for an already aliased intercept to resolve before moving on to the next command in Cypress.
+
+'wait 2 seconds'
+'wait 500 milliseconds'
+'wait for @customer alias'
+'wait for the @users request to finish'
+
+Command options
+'go to "/users" with a timeout of 10 seconds'
+'dismiss the modal using a timeout of 6 seconds'
+'force click the submit button'
+'force click the "Close" button'
+'force type "text" in the hidden input field'
+'force check the "I agree" checkbox'
+'force uncheck the "Send updates" checkbox'

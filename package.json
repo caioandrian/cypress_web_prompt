@@ -1,0 +1,43 @@
+{
+  "name": "cypress_web_prompt",
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "description": "Projeto de automação de testes E2E com Cypress e IA",
+  "main": "index.js",
+  "scripts": {
+    "cy:open": "npx cypress open",
+    "cy:open-prod": "npx cypress open --env fileConfig=prod",
+    "cy:run-saucedemo-pt": "npx cypress run --spec 'cypress/e2e/spec/exemplos/saucedemo_pt.cy.js' --browser chrome --headless",
+    "cy:run-saucedemo-en": "npx cypress run --spec 'cypress/e2e/spec/exemplos/saucedemo_en.cy.js' --browser chrome --headless",
+    "cy:run-bugbank-pt": "npx cypress run --spec 'cypress/e2e/spec/exemplos/bugbank_pt.cy.js' --browser chrome --headless",
+    "cy:run-bugbank-en": "npx cypress run --spec 'cypress/e2e/spec/exemplos/bugbank_en.cy.js' --browser chrome --headless",
+    "cy:all-tests": "npx cypress run --spec 'cypress/e2e/spec/exemplos/**.cy.js' --browser chrome --headless",
+    "cypress:verify": "npx cypress verify",
+    "update-packages": "npx npm-check-updates",
+    "test": "npx cypress run"
+  },
+  "keywords": [
+    "cypress",
+    "e2e",
+    "ia",
+    "ai",
+    "automation intelligence",
+    "artificial intelligence"
+  ],
+  "author": "Caio Andrian",
+  "license": "MIT",
+  "devDependencies": {
+    "cypress": "^15.14.1",
+    "cypress-mochawesome-reporter": "^3.8.2",
+    "fs-extra": "^11.2.0",
+    "junit-report-merger": "^9.0.3",
+    "mochawesome": "^7.1.3",
+    "mochawesome-merge": "^4.3.0",
+    "mochawesome-report-generator": "^6.2.0"
+  },
+  "dependencies": {
+    "mocha": "^11.3.0"
+  }
+}

@@ -1,0 +1,21 @@
+{
+    "env": {
+        "ambiente": "hmg",
+        "global_timeout": 40000,
+        "MockRequest": false,
+        "user_agent": "BOT",
+        "projeto": "TEST",
+        "utm_sorce": "?utm_sorce=teste",
+    
+        "saucedemo": "https://www.saucedemo.com/",
+        "bugbank": "https://bugbank.netlify.app/",
+        "users": {
+            "saucedemo": {"username":"standard_user", "senha":"secret_sauce"},
+            "bugbank": {"email":"testecaioqa@testeqa.com.br", "password":"123", "email_destino":"testecaioqa2@testeqa.com.br", "password_destino":"123"}
+        },
+        "bugbank_contas": {
+            "conta_origem": {"conta":"857", "digito":"5", "saldo":"50"},
+            "conta_destino": {"conta":"189", "digito":"1", "saldo":"100"}
+        }
+    } 
+}
