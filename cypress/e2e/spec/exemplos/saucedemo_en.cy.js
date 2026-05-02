@@ -23,7 +23,7 @@ describe('SauceDemo - Ecommerce - IA - English Version', () => {
     })
   })
 
-  it('Add 2 products to cart from the home page', () => {
+  it('Validate products added to cart', () => {
       cy.prompt(
         [
           'wait 2 seconds',
@@ -62,11 +62,9 @@ describe('SauceDemo - Ecommerce - IA - English Version', () => {
             'wait 2 seconds',
             'click "Add to cart" on the second product in the list',
             'force click on [data-test="shopping-cart-link"]',
-            `verify that [data-test="inventory-item-price"] with value {{value}} is visible inside [data-test='cart-list']`,
+            `verify that [data-test="inventory-item-price"] with value ${value} is visible inside [data-test='cart-list']`,
             'click "Checkout"',
-          ],{
-            placeholders: { value },
-          }
+          ]
         )
     })
   })

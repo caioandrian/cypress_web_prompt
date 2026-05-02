@@ -23,7 +23,7 @@ describe('SauceDemo - Ecommerce - IA - Portuguese Version', () => {
     })
   })
 
-  it('Adicionar 2 produtos no carrinho pela home', () => {
+  it('Validar produtos adicionados no carrinho', () => {
       cy.prompt(
         [
           'wait 2 seconds',
@@ -54,24 +54,22 @@ describe('SauceDemo - Ecommerce - IA - Portuguese Version', () => {
 
   it('Validar preço do produto na tela do carrinho', () => {
     cy.get('[data-test="inventory-list"] [data-test="inventory-item-price"]').eq(1)
-      .first().invoke('text').as('valor_produto')
+      .invoke('text').as('valor_produto')
 
     cy.get('@valor_produto').then((valor) => {
       cy.prompt(
         [
           'wait 2 seconds',
-          'clicar em "Add to cart" o segundo produto da lista',
+          'clicar em "Add to cart" do segundo produto da lista',
           'clicar em [data-test="shopping-cart-link"]',
-          `verificar que o elemento [data-test="inventory-item-price"] com o valor {{valor}} está visível dentro de [data-test='cart-list']`,
+          `verificar que o elemento [data-test="inventory-item-price"] com o valor ${valor} está visível dentro de [data-test='cart-list']`,
           'clicar em "Checkout"',
-        ],{
-          placeholders: { valor },
-        }
+        ]
       )
     })
   })
 
-  it.only('Finalizar pedido com sucesso', () => {
+  it('Finalizar pedido com sucesso', () => {
     cy.prompt(
       [
         'wait 2 seconds',
