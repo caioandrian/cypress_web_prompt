@@ -10,6 +10,8 @@ Automação de testes **E2E** com [Cypress](https://www.cypress.io/), usando pas
 |------|--------|
 | **Node.js** | `>= 20` |
 | **npm** | compatível com a sua instalação do Node |
+| **Cypress** | `15+` |
+| **Cypress Cloud** | conta grátis |
 
 > Em ambientes corporativos, garanta acesso à internet para instalar dependências e para os sites usados nos exemplos.
 
