@@ -3,8 +3,8 @@
 describe('SauceDemo - Ecommerce - IA - Portuguese Version', () => {
 
   beforeEach(() => {
-    cy.clearCookies();
-    cy.clearLocalStorage();
+    //cy.clearCookies();
+    //cy.clearLocalStorage();
     
     cy.env(['users', 'saucedemo'], { log: false }).then(({ users, saucedemo: url }) => {
       const { username, senha: password } = users.saucedemo

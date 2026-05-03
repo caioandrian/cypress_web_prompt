@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cenários Cypress — Bugbank &amp; SauceDemo</title>
+  <style>
+    :root {
+      --nav-h: 52px;
+      --bg: #0f1419;
+      --surface: #1a2332;
+      --border: #2d3a4d;
+      --text: #e7ecf3;
+      --muted: #8b9cb3;
+      --accent: #3d8bfd;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+    }
+    .nav-fixa {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: var(--nav-h);
+      padding: 0 20px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+    }
+    .nav-fixa__label {
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-right: 8px;
+    }
+    .nav-fixa button {
+      font: inherit;
+      cursor: pointer;
+      padding: 8px 18px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .nav-fixa button:hover {
+      background: rgba(61, 139, 253, 0.12);
+      border-color: var(--accent);
+    }
+    .nav-fixa button[aria-pressed="true"] {
+      background: rgba(61, 139, 253, 0.25);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    .principal {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, 1fr);
+      gap: 20px;
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: calc(var(--nav-h) + 20px) 20px 28px;
+      min-height: 100vh;
+      align-items: start;
+    }
+    @media (max-width: 960px) {
+      .principal {
+        grid-template-columns: 1fr;
+      }
+    }
+    .col-codigo h2 {
+      margin: 0 0 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--muted);
+    }
+    .contexto {
+      display: none;
+    }
+    .contexto.ativo {
+      display: block;
+    }
+    .cenario {
+      margin-bottom: 10px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface);
+      overflow: hidden;
+    }
+    .cenario__titulo {
+      padding: 12px 14px;
+      cursor: pointer;
+      font-weight: 500;
+      list-style: none;
+      user-select: none;
+    }
+    .cenario__titulo::-webkit-details-marker { display: none; }
+    .cenario__titulo::before {
+      content: "▸";
+      display: inline-block;
+      margin-right: 8px;
+      transition: transform 0.15s;
+      color: var(--accent);
+    }
+    details[open] .cenario__titulo::before {
+      transform: rotate(90deg);
+    }
+    .cenario__codigo {
+      display: block;
+      width: 100%;
+      margin: 0;
+      padding: 14px 16px 16px;
+      border: none;
+      border-top: 1px solid var(--border);
+      background: #0d1117;
+      color: #c9d1d9;
+      font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      resize: vertical;
+      min-height: 500px;
+      white-space: pre;
+      overflow: auto;
+      tab-size: 2;
+    }
+    .col-video {
+      position: sticky;
+      top: calc(var(--nav-h) + 16px);
+    }
+    .col-video h2 {
+      margin: 0 0 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--muted);
+    }
+    .video-wrap {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: #000;
+    }
+    .video-wrap video {
+      display: block;
+      width: 100%;
+      max-height: min(70vh, 640px);
+      vertical-align: middle;
+    }
+    .video-acoes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+      align-items: center;
+    }
+    .video-acoes button {
+      font: inherit;
+      cursor: pointer;
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--accent);
+      background: rgba(61, 139, 253, 0.2);
+      color: #fff;
+    }
+    .video-acoes button:hover {
+      background: rgba(61, 139, 253, 0.35);
+    }
+    .video-acoes .hint {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav-fixa" aria-label="Contexto do teste">
+    <span class="nav-fixa__label">Contexto</span>
+    <button type="button" id="tab-bugbank" aria-pressed="true">bugbank</button>
+    <button type="button" id="tab-saucedemo" aria-pressed="false">saucedemo</button>
+  </nav>
+
+  <main class="principal">
+    <section class="col-codigo" aria-labelledby="codigo-titulo">
+      <h2 id="codigo-titulo">Código · <span id="codigo-contexto-label">bugbank_pt.cy.js</span></h2>
+
+      <div id="ctx-bugbank" class="contexto ativo" role="region" aria-label="Cenários Bugbank">
+        
+        <details class="cenario">
+          <summary class="cenario__titulo">describe + beforeEach (compartilhado)</summary>
+          <textarea class="cenario__codigo" readonly spellcheck="false" rows="1">/// <reference types="cypress" />
+
+describe('Bugbank - Finance - IA - Portuguese Version', () => {
+
+  beforeEach(() => {
+    cy.clearCookies();
+    cy.clearLocalStorage();
+    cy.setBugbankUserLocalStorage()
+    
+    cy.env(['users', 'bugbank'], { log: false }).then(({ users, bugbank: url }) => {
+      const { email, password } = users.bugbank
+      cy.prompt(
+        [
+          'wait 2 seconds',
+          `visitar {{url}}`,
+          'wait 2 seconds',
+          'digitar {{email}} no campo E-mail',
+          'digitar {{password}} no campo Senha',
+          'clicar no botão Acessar',
+          'verificar url contém "/home"',
+        ],
+        {
+          placeholders: {
+            email: String(email), password: String(password), url: String(url),
+          },
+        }
+      )
+    })
+  })
+</textarea>
+        </details>
+
+        <details class="cenario">
+          <summary class="cenario__titulo">it('Fazer uma transferência entre contas e verificar o extrato')</summary>
+          <textarea class="cenario__codigo" readonly spellcheck="false" rows="1">  it('Fazer uma transferência entre contas e verificar o extrato', () => {
+    cy.env(['bugbank_contas'], { log: false }).then(({ bugbank_contas }) => {
+      const { conta: conta_destino, digito: digito_destino } = bugbank_contas.conta_destino
+      var { saldo: saldo_origem } = bugbank_contas.conta_origem
+      const valor_transferido = 5
+      const saldo_atualizado = (saldo_origem - (valor_transferido * 2))
+      //valor transferido duplicado devido a necessidade de clicar duas vezes no botão submit - bug do teste
+
+      cy.prompt(
+        [
+          'wait 2 seconds',
+          'forçar clicar na imagem do link TRANSFERÊNCIA',
+          'verificar url contém "/transfer"',
+          'digitar {{conta_destino}} no campo [name=accountNumber]',
+          'digitar {{digito_destino}} no campo [name=digit]',
+          `digitar ${valor_transferido} no campo [name=transferValue]`,
+          'digitar "teste do caio" no campo [name=description]',
+          'wait 2 seconds',
+          'duplo clique no botão submit',
+          'confirmar que o elemento #modalText possui o texto "Transferencia realizada com sucesso"',
+          'clicar no botão Fechar',
+          'clicar no botão Voltar',
+          'verificar url contém "/home"',
+          'wait 2 seconds',
+          'forçar clicar na imagem do link EXTRATO',
+          'verificar url contém "/bank-statement"',
+          'verificar que o texto "Transferência enviada" está visível',
+          `confirmar que uma transação contém o valor "${valor_transferido},00"`,
+          `confirmar que o saldo disponível contém o valor "${saldo_atualizado},00"`,
+        ],
+        {
+          placeholders: {
+            conta_destino: String(conta_destino), digito_destino: String(digito_destino)
+          },
+        }
+      )
+    })
+  })
+</textarea>
+        </details>
+
+        <details class="cenario">
+          <summary class="cenario__titulo">it('Fazer uma transferência entre contas com falha')</summary>
+          <textarea class="cenario__codigo" readonly spellcheck="false" rows="1">  it('Fazer uma transferência entre contas com falha', () => {
+    cy.prompt(
+      [
+        'wait 2 seconds',
+        'forçar clicar na imagem do link TRANSFERÊNCIA',
+        'verificar url contém "/transfer"',
+        'digitar 0000 no campo [name=accountNumber]',
+        'digitar 1 no campo [name=digit]',
+        'digitar 5 no campo [name=transferValue]',
+        'digitar "teste do caio" no campo [name=description]',
+        'wait 2 seconds',
+        'duplo clique no botão submit',
+        'confirmar que o elemento #modalText possui o texto "Conta inválida ou inexistente"'
+      ]
+    )
+  })
+</textarea>
+        </details>
+      </div>
+      <div id="ctx-saucedemo" class="contexto" role="region" aria-label="Cenários SauceDemo">
+        
+        <details class="cenario">
+          <summary class="cenario__titulo">describe + beforeEach (compartilhado)</summary>
+          <textarea class="cenario__codigo" readonly spellcheck="false" rows="1">/// <reference types="cypress" />
+
+describe('SauceDemo - Ecommerce - IA - Portuguese Version', () => {
+
+  beforeEach(() => {
+    cy.clearCookies();
+    cy.clearLocalStorage();
+    
+    cy.env(['users', 'saucedemo'], { log: false }).then(({ users, saucedemo: url }) => {
+      const { username, senha: password } = users.saucedemo
+      cy.prompt(
+        [
+          `visitar {{url}}`,
+          'digite {{username}} no campo username',
+          'digite {{password}} no campo password',
+          'clicar no botão Login',
+          'verificar se a tela com os produtos são exibidos',
+        ],
+        {
+          placeholders: { username, password, url },
+        }
+      )
+    })
+  })
+</textarea>
+        </details>
+
+        <details class="cenario">
+          <summary class="cenario__titulo">it('Validar produtos adicionados no carrinho')</summary>
+          <textarea class="cenario__codigo" readonly spellcheck="false" rows="1">  it('Validar produtos adicionados no carrinho', () => {
+      cy.prompt(
+        [
+          'wait 2 seconds',
+          'clicar em "Add to cart" no produto "Sauce Labs Backpack"',
+          'clicar em "Add to cart" no produto "Sauce Labs Onesie"',
+          'verificar que existem 2 produtos adicionados no icone do carrinho',
+          'clicar em [data-test="shopping-cart-link"]',  
+          'verificar que o produto "Sauce Labs Backpack" está visível',
+          'verificar que o produto "Sauce Labs Onesie" está visível',
+          'verificar que o botão de "Remove" está visível',
+          'verificar que o botão de "Checkout" está visível',
+      ]
+    )
+  })
+</textarea>
+        </details>
+
+        <details class="cenario">
+          <summary class="cenario__titulo">it('Remover produto do carrinho pela home')</summary>
+          <textarea class="cenario__codigo" readonly spellcheck="false" rows="1">  it('Remover produto do carrinho pela home', () => {
+    cy.prompt(
+      [
+        'wait 2 seconds',
+        'clicar em "Add to cart" no produto "Sauce Labs Backpack"',
+        'clicar no botão de "Remove" no produto "Sauce Labs Backpack"',
+        'verificar que [data-test="shopping-cart-link"] está vazio',
+        'clicar em [data-test="shopping-cart-link"]',  
+        'verificar que [data-test="inventory-item"] não existe',
+      ]
+    )
+  })
+</textarea>
+        </details>
+
+        <details class="cenario">
+          <summary class="cenario__titulo">it('Validar preço do produto na tela do carrinho')</summary>
+          <textarea class="cenario__codigo" readonly spellcheck="false" rows="1">  it('Validar preço do produto na tela do carrinho', () => {
+    cy.get('[data-test="inventory-list"] [data-test="inventory-item-price"]').eq(1)
+      .invoke('text').as('valor_produto')
+
+    cy.get('@valor_produto').then((valor) => {
+      cy.prompt(
+        [
+          'wait 2 seconds',
+          'clicar em "Add to cart" do segundo produto da lista',
+          'clicar em [data-test="shopping-cart-link"]',
+          `verificar que o elemento [data-test="inventory-item-price"] com o valor ${valor} está visível dentro de [data-test='cart-list']`,
+          'clicar em "Checkout"',
+        ]
+      )
+    })
+  })
+</textarea>
+        </details>
+
+        <details class="cenario">
+          <summary class="cenario__titulo">it('Finalizar pedido com sucesso')</summary>
+          <textarea class="cenario__codigo" readonly spellcheck="false" rows="1">  it('Finalizar pedido com sucesso', () => {
+    cy.prompt(
+      [
+        'wait 2 seconds',
+        'clicar em "Add to cart" em um produto',
+        'verificar que existe 1 produto adicionado no icone do carrinho',
+        'clicar em [data-test="shopping-cart-link"]',  
+        'verificar que o produto adicionado está visível',
+        'wait 2 seconds',
+        'clicar no botão "Checkout"',
+        'verificar url contém "/checkout-step-one.html"',
+        'preencher o campo "First Name" com "John"',
+        'preencher o campo "Last Name" com "Doe"',  
+        'preencher o campo "Postal Code" com "12345"',
+        'wait 2 seconds',
+        'clicar no botão "Continue"',
+        'verificar url contém "/checkout-step-two.html"',
+        'verificar que o produto adicionado está visível',
+        'verificar que o elemento [data-test="total-label"] está visível',
+        'wait 2 seconds',
+        'clicar no botão "Finish"',
+        'verificar url contém "/checkout-complete.html"',
+        'verificar que a mensagem "Thank you for your order!" está visível',
+        'clicar no botão "Back Home"',
+        'verificar url contém "/inventory.html"',
+      ]
+    )
+  })
+</textarea>
+        </details>
+      </div>
+    </section>
+
+    <section class="col-video" aria-labelledby="video-titulo">
+      <h2 id="video-titulo">Gravação · <span id="video-contexto-label">bugbank</span></h2>
+      <div class="video-wrap">
+        <video
+          id="demo-video"
+          controls
+          playsinline
+          preload="metadata"
+          src="videos/bugbank.mp4"
+        >
+          Seu navegador não suporta reprodução de vídeo HTML5.
+        </video>
+      </div>
+      <div class="video-acoes">
+        <button type="button" id="btn-fullscreen">Abrir em tela cheia</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      const video = document.getElementById('demo-video');
+      const btnFs = document.getElementById('btn-fullscreen');
+      const tabBug = document.getElementById('tab-bugbank');
+      const tabSauce = document.getElementById('tab-saucedemo');
+      const ctxBug = document.getElementById('ctx-bugbank');
+      const ctxSauce = document.getElementById('ctx-saucedemo');
+      const labelCodigo = document.getElementById('codigo-contexto-label');
+      const labelVideo = document.getElementById('video-contexto-label');
+
+      function setContexto(id) {
+        const isBug = id === 'bugbank';
+        tabBug.setAttribute('aria-pressed', isBug ? 'true' : 'false');
+        tabSauce.setAttribute('aria-pressed', isBug ? 'false' : 'true');
+        ctxBug.classList.toggle('ativo', isBug);
+        ctxSauce.classList.toggle('ativo', !isBug);
+        labelCodigo.textContent = isBug ? 'bugbank_pt.cy.js' : 'saucedemo_pt.cy.js';
+        labelVideo.textContent = isBug ? 'bugbank' : 'saucedemo';
+        const base = 'videos/' + (isBug ? 'bugbank' : 'saucedemo') + '.mp4';
+        if (video.getAttribute('src') !== base) {
+          video.pause();
+          video.removeAttribute('src');
+          video.load();
+          video.src = base;
+        }
+      }
+
+      tabBug.addEventListener('click', function () { setContexto('bugbank'); });
+      tabSauce.addEventListener('click', function () { setContexto('saucedemo'); });
+
+      const detalhes = document.querySelectorAll('details.cenario');
+      detalhes.forEach(function (d) {
+        d.addEventListener('toggle', function () {
+          if (!d.open) return;
+          detalhes.forEach(function (outro) {
+            if (outro !== d) outro.open = false;
+          });
+        });
+      });
+
+      btnFs.addEventListener('click', function () {
+        const el = video;
+        if (!el) return;
+        if (el.requestFullscreen) el.requestFullscreen();
+        else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+        else if (el.msRequestFullscreen) el.msRequestFullscreen();
+      });
+    })();
+  </script>
+</body>
+</html>

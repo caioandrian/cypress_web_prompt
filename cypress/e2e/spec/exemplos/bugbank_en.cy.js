@@ -3,8 +3,8 @@
 describe('Bugbank - Finance - IA - English Version', () => {
 
   beforeEach(() => {
-    cy.clearCookies();
-    cy.clearLocalStorage();
+    //cy.clearCookies();
+    //cy.clearLocalStorage();
     cy.setBugbankUserLocalStorage()
 
     cy.env(['users', 'bugbank'], { log: false }).then(({ users, bugbank: url }) => {

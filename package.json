@@ -38,6 +38,7 @@
     "mochawesome-report-generator": "^6.2.0"
   },
   "dependencies": {
-    "mocha": "^11.3.0"
+    "mocha": "^11.3.0",
+    "rimraf": "^6.1.3"
   }
 }
